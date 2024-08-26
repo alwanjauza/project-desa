@@ -63,8 +63,6 @@ function HomePage() {
       });
   };
 
-  console.log(berita);
-
   return (
     <div className='bg-[#f3f3f3]'>
       <div className='bg-primary px-4 py-20 md:px-16 lg:px-32 lg:py-40'>
@@ -248,9 +246,9 @@ function HomePage() {
                 viewBox='0 0 24 24'
                 fill='none'
                 stroke='currentColor'
-                stroke-width='2'
-                stroke-linecap='round'
-                stroke-linejoin='round'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
                 class='icon icon-tabler icons-tabler-outline icon-tabler-haze'
               >
                 <path stroke='none' d='M0 0h24v24H0z' fill='none' />
@@ -281,9 +279,9 @@ function HomePage() {
                 viewBox='0 0 24 24'
                 fill='none'
                 stroke='currentColor'
-                stroke-width='2'
-                stroke-linecap='round'
-                stroke-linejoin='round'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
                 class='icon icon-tabler icons-tabler-outline icon-tabler-sunset-2'
               >
                 <path stroke='none' d='M0 0h24v24H0z' fill='none' />
@@ -314,9 +312,9 @@ function HomePage() {
                 viewBox='0 0 24 24'
                 fill='none'
                 stroke='currentColor'
-                stroke-width='2'
-                stroke-linecap='round'
-                stroke-linejoin='round'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
                 class='icon icon-tabler icons-tabler-outline icon-tabler-sunrise'
               >
                 <path stroke='none' d='M0 0h24v24H0z' fill='none' />
@@ -341,9 +339,9 @@ function HomePage() {
                 viewBox='0 0 24 24'
                 fill='none'
                 stroke='currentColor'
-                stroke-width='2'
-                stroke-linecap='round'
-                stroke-linejoin='round'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
                 class='icon icon-tabler icons-tabler-outline icon-tabler-haze-moon'
               >
                 <path stroke='none' d='M0 0h24v24H0z' fill='none' />
@@ -390,9 +388,9 @@ function HomePage() {
                 viewBox='0 0 24 24'
                 fill='none'
                 stroke='currentColor'
-                stroke-width='2'
-                stroke-linecap='round'
-                stroke-linejoin='round'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
                 class='icon icon-tabler icons-tabler-outline icon-tabler-moon-stars'
               >
                 <path stroke='none' d='M0 0h24v24H0z' fill='none' />
@@ -485,9 +483,9 @@ function HomePage() {
                         viewBox='0 0 24 24'
                         fill='none'
                         stroke='gray'
-                        stroke-width='2'
-                        stroke-linecap='round'
-                        stroke-linejoin='round'
+                        strokeWidth='2'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
                         class='icon icon-tabler icons-tabler-outline icon-tabler-calendar'
                       >
                         <path stroke='none' d='M0 0h24v24H0z' fill='none' />
