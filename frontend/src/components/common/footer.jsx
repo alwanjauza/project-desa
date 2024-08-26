@@ -181,7 +181,7 @@ const Footer = () => {
         </div>
         <div className='flex flex-col mt-2'>
           <p className='text-sm'>© 2024 Desa Sukogelap. All rights reserved.</p>
-          <p className='text-sm'>Made with ❤️ by ...</p>
+          <p className='text-sm'>Made with ❤️ by AJ</p>
         </div>
       </div>
     </footer>
