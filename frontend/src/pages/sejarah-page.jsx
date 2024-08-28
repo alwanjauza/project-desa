@@ -31,7 +31,7 @@ function SejarahPage() {
             strokeWidth='2'
             strokeLinecap='round'
             strokeLinejoin='round'
-            class='icon icon-tabler icons-tabler-outline icon-tabler-home'
+            className='icon icon-tabler icons-tabler-outline icon-tabler-home'
           >
             <path stroke='none' d='M0 0h24v24H0z' fill='none' />
             <path d='M5 12l-2 0l9 -9l9 9l-2 0' />

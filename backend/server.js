@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const bodyParser = require("body-parser");
+const articleRoutes = require("./routes/article");
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 
 // Use authentication routes
 app.use("/auth", authRoutes);
+app.use("/api", articleRoutes);
 
 const PORT = process.env.PORT || 5000;
 

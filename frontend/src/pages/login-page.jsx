@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -21,6 +23,7 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     axios
       .post("http://localhost:5000/auth/login", {
@@ -30,9 +33,13 @@ const LoginPage = () => {
       .then((response) => {
         const { token } = response.data;
         login(token);
-        navigate("/dashboard");
+        setTimeout(() => {
+          setIsLoading(false);
+          navigate("/dashboard");
+        }, 2000);
       })
       .catch((error) => {
+        setIsLoading(false);
         console.error(error);
       });
   };
@@ -124,12 +131,31 @@ const LoginPage = () => {
             </div>
           </div>
           <div className='flex items-center justify-between'>
-            <button
+            <Button
               type='submit'
-              className='bg-blue-500 hover:bg-blue-700 w-full text-white font-bold py-3 px-6 rounded focus:outline-none focus:shadow-outline'
+              disabled={isLoading}
+              className='bg-primary hover:bg-secondary w-full text-white font-bold py-3 px-6 rounded focus:outline-none focus:shadow-outline'
             >
-              Login
-            </button>
+              {isLoading ? (
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='24'
+                  height='24'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  className={`animate-spin h-5 w-5 text-white inline-block icon icon-tabler icons-tabler-outline icon-tabler-loader-2`}
+                >
+                  <path stroke='none' d='M0 0h24v24H0z' fill='none' />
+                  <path d='M12 3a9 9 0 1 0 9 9' />
+                </svg>
+              ) : (
+                "Login"
+              )}
+            </Button>
           </div>
         </form>
       </div>

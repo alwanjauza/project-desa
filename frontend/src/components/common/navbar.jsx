@@ -43,7 +43,7 @@ const Navbar = () => {
             <Link to='/budaya' className='text-gray-300 hover:text-white'>
               Budaya
             </Link>
-            <Link to='sarana' className='text-gray-300 hover:text-white'>
+            <Link to='/sarana' className='text-gray-300 hover:text-white'>
               Sarana dan Prasarana
             </Link>
             <Link to='/lokasi' className='text-gray-300 hover:text-white'>

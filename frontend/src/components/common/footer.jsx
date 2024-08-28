@@ -4,7 +4,7 @@ const Footer = () => {
   const [lineClimb, setLineClimb] = useState(false);
 
   return (
-    <footer className='bg-teal-700 text-gray-100 py-12'>
+    <footer className='bg-primary text-gray-100 py-12'>
       <div className='container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-6'>
         <div>
           <h2 className='text-xl font-bold'>DESA SUKOGELAP</h2>

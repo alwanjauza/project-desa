@@ -11,6 +11,8 @@ import SaranaPage from "../pages/sarana-page";
 import LoginPage from "../pages/login-page";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardPage from "../pages/dashboard-page";
+import DashboardLayout from "../layouts/DashboardLayout";
+import Sidebar from "../components/common/sidebar";
 
 const AppRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -29,21 +31,62 @@ const AppRoute = () => {
   }
 
   return (
-    // <AppLayout>
     <Routes>
       <Route path='*' element={<NotFoundPage />} />
       <Route path='/auth/login' element={<LoginPage />} />
       <Route
         path='/dashboard'
-        element={<ProtectedRoute element={<DashboardPage />} />}
+        element={
+          <ProtectedRoute
+            element={
+              <Sidebar>
+                <DashboardPage />
+              </Sidebar>
+            }
+          />
+        }
       />
-      <Route path='/' element={<HomePage />} />
-      <Route path='/sejarah' element={<SejarahPage />} />
-      <Route path='/budaya' element={<BudayaPage />} />
-      <Route path='/lokasi' element={<LokasiPage />} />
-      <Route path='/sarana' element={<SaranaPage />} />
+      <Route
+        path='/'
+        element={
+          <AppLayout>
+            <HomePage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path='/sejarah'
+        element={
+          <AppLayout>
+            <SejarahPage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path='/budaya'
+        element={
+          <AppLayout>
+            <BudayaPage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path='/lokasi'
+        element={
+          <AppLayout>
+            <LokasiPage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path='/sarana'
+        element={
+          <AppLayout>
+            <SaranaPage />
+          </AppLayout>
+        }
+      />
     </Routes>
-    // </AppLayout>
   );
 };
 

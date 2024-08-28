@@ -249,7 +249,7 @@ function HomePage() {
                 strokeWidth='2'
                 strokeLinecap='round'
                 strokeLinejoin='round'
-                class='icon icon-tabler icons-tabler-outline icon-tabler-haze'
+                className='icon icon-tabler icons-tabler-outline icon-tabler-haze'
               >
                 <path stroke='none' d='M0 0h24v24H0z' fill='none' />
                 <path d='M3 12h1' />
@@ -282,7 +282,7 @@ function HomePage() {
                 strokeWidth='2'
                 strokeLinecap='round'
                 strokeLinejoin='round'
-                class='icon icon-tabler icons-tabler-outline icon-tabler-sunset-2'
+                className='icon icon-tabler icons-tabler-outline icon-tabler-sunset-2'
               >
                 <path stroke='none' d='M0 0h24v24H0z' fill='none' />
                 <path d='M3 13h1' />
@@ -315,7 +315,7 @@ function HomePage() {
                 strokeWidth='2'
                 strokeLinecap='round'
                 strokeLinejoin='round'
-                class='icon icon-tabler icons-tabler-outline icon-tabler-sunrise'
+                className='icon icon-tabler icons-tabler-outline icon-tabler-sunrise'
               >
                 <path stroke='none' d='M0 0h24v24H0z' fill='none' />
                 <path d='M3 17h1m16 0h1m-15.4 -6.4l.7 .7m12.1 -.7l-.7 .7m-9.7 5.7a4 4 0 0 1 8 0' />
@@ -342,7 +342,7 @@ function HomePage() {
                 strokeWidth='2'
                 strokeLinecap='round'
                 strokeLinejoin='round'
-                class='icon icon-tabler icons-tabler-outline icon-tabler-haze-moon'
+                className='icon icon-tabler icons-tabler-outline icon-tabler-haze-moon'
               >
                 <path stroke='none' d='M0 0h24v24H0z' fill='none' />
                 <path d='M3 16h18' />
@@ -365,7 +365,7 @@ function HomePage() {
                 height='24'
                 viewBox='0 0 24 24'
                 fill='currentColor'
-                class='icon icon-tabler icons-tabler-filled icon-tabler-moon'
+                className='icon icon-tabler icons-tabler-filled icon-tabler-moon'
               >
                 <path stroke='none' d='M0 0h24v24H0z' fill='none' />
                 <path d='M12 1.992a10 10 0 1 0 9.236 13.838c.341 -.82 -.476 -1.644 -1.298 -1.31a6.5 6.5 0 0 1 -6.864 -10.787l.077 -.08c.551 -.63 .113 -1.653 -.758 -1.653h-.266l-.068 -.006l-.06 -.002z' />
@@ -391,7 +391,7 @@ function HomePage() {
                 strokeWidth='2'
                 strokeLinecap='round'
                 strokeLinejoin='round'
-                class='icon icon-tabler icons-tabler-outline icon-tabler-moon-stars'
+                className='icon icon-tabler icons-tabler-outline icon-tabler-moon-stars'
               >
                 <path stroke='none' d='M0 0h24v24H0z' fill='none' />
                 <path d='M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z' />
@@ -486,7 +486,7 @@ function HomePage() {
                         strokeWidth='2'
                         strokeLinecap='round'
                         strokeLinejoin='round'
-                        class='icon icon-tabler icons-tabler-outline icon-tabler-calendar'
+                        className='icon icon-tabler icons-tabler-outline icon-tabler-calendar'
                       >
                         <path stroke='none' d='M0 0h24v24H0z' fill='none' />
                         <path d='M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z' />
