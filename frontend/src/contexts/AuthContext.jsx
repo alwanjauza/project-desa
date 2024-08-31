@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
@@ -7,22 +8,50 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Check if user is authenticated when the app loads
-    const token = localStorage.getItem("token");
-    if (token) {
-      // Verify token or fetch user data from server if needed
-      setAuth(true); // Assuming token is valid
+    const user = localStorage.getItem("user");
+
+    if (user) {
+      const { token } = JSON.parse(user);
+
+      if (token) {
+        // Decode the token to get the expiration time
+        const decodedToken = jwtDecode(token);
+        const expirationTime = decodedToken.exp * 1000; // Convert to milliseconds
+        const currentTime = Date.now();
+        const timeRemaining = expirationTime - currentTime;
+
+        if (timeRemaining > 0) {
+          setAuth(true); // Assuming token is valid
+
+          // Set a timeout to auto-logout when the token expires
+          const logoutTimer = setTimeout(() => {
+            logout();
+          }, timeRemaining);
+
+          // Clear the timeout when the component unmounts or the effect is re-run
+          return () => clearTimeout(logoutTimer);
+        } else {
+          logout(); // Token is expired, logout immediately
+        }
+      }
     } else {
       setAuth(false);
     }
   }, []);
 
-  const login = (token) => {
-    localStorage.setItem("token", token);
+  const login = (id, name, token, role) => {
+    const userData = {
+      id,
+      name,
+      token,
+      role,
+    };
+    localStorage.setItem("user", JSON.stringify(userData));
     setAuth(true);
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.clear();
     setAuth(false);
   };
 

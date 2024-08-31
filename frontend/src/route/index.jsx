@@ -1,8 +1,8 @@
 import { Route, Routes, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import HomePage from "../pages/home-page";
 import AppLayout from "../layouts/AppLayout";
 import NotFoundPage from "../pages/notFound-page";
-import { useEffect, useState } from "react";
 import LoadingPage from "../pages/loading-page";
 import SejarahPage from "../pages/sejarah-page";
 import BudayaPage from "../pages/budaya-page";
@@ -11,8 +11,11 @@ import SaranaPage from "../pages/sarana-page";
 import LoginPage from "../pages/login-page";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardPage from "../pages/dashboard-page";
-import DashboardLayout from "../layouts/DashboardLayout";
 import Sidebar from "../components/common/sidebar";
+import ListingSchedule from "@/pages/schedule/listing-schedule";
+import NewSchedule from "@/pages/schedule/new-schedule";
+import UpdateSchedule from "@/pages/schedule/update-schedule";
+import SchedulesPage from "@/pages/schedules-page";
 
 const AppRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -41,6 +44,42 @@ const AppRoute = () => {
             element={
               <Sidebar>
                 <DashboardPage />
+              </Sidebar>
+            }
+          />
+        }
+      />
+      <Route
+        path='/dashboard/schedule'
+        element={
+          <ProtectedRoute
+            element={
+              <Sidebar>
+                <ListingSchedule />
+              </Sidebar>
+            }
+          />
+        }
+      />
+      <Route
+        path='/dashboard/schedule/new'
+        element={
+          <ProtectedRoute
+            element={
+              <Sidebar>
+                <NewSchedule />
+              </Sidebar>
+            }
+          />
+        }
+      />
+      <Route
+        path='/dashboard/schedule/update/:id'
+        element={
+          <ProtectedRoute
+            element={
+              <Sidebar>
+                <UpdateSchedule />
               </Sidebar>
             }
           />
@@ -83,6 +122,14 @@ const AppRoute = () => {
         element={
           <AppLayout>
             <SaranaPage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path='/jadwal'
+        element={
+          <AppLayout>
+            <SchedulesPage />
           </AppLayout>
         }
       />

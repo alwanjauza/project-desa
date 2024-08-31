@@ -27,7 +27,10 @@ const updateSchedule = async (id, data) => {
     where: {
       id: parseInt(id, 10), // Convert the ID to an integer
     },
-    data,
+    data: {
+      ...data, // Spread the data object to update the schedule
+      date: `${data.date}T00:00:00.000Z`, // Ensure the date is in the correct format
+    },
   });
 };
 
@@ -40,9 +43,67 @@ const deleteSchedule = async (id) => {
   });
 };
 
-// Get all schedules
-const getAllSchedules = async () => {
+// Get all schedules with pagination
+const getAllSchedules = async (page = 1, limit = 10) => {
+  const skip = (page - 1) * limit;
+
+  const [schedules, totalCount] = await Promise.all([
+    prisma.schedule.findMany({
+      skip,
+      take: limit,
+      include: {
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    }),
+    prisma.schedule.count(), // Get total count of schedules
+  ]);
+
+  return {
+    schedules,
+    totalPages: Math.ceil(totalCount / limit), // Calculate total pages
+  };
+};
+
+// Get upcoming schedules sorted by date closest to today
+const getUpcomingSchedules = async () => {
   return await prisma.schedule.findMany({
+    where: {
+      date: {
+        gte: new Date(), // Only future dates
+      },
+    },
+    orderBy: {
+      date: "asc", // Closest dates first
+    },
+    include: {
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+};
+
+// Get schedules for today
+const getSchedulesForToday = async () => {
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
+
+  return await prisma.schedule.findMany({
+    where: {
+      date: {
+        gte: startOfDay,
+        lte: endOfDay,
+      },
+    },
     include: {
       author: {
         select: {
@@ -74,5 +135,7 @@ module.exports = {
   updateSchedule,
   deleteSchedule,
   getAllSchedules,
+  getUpcomingSchedules,
+  getSchedulesForToday,
   getScheduleById,
 };

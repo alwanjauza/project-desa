@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import endPoint from "@/api/apiConfig";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -26,13 +27,13 @@ const LoginPage = () => {
     setIsLoading(true);
 
     axios
-      .post("http://localhost:5000/auth/login", {
+      .post(endPoint.getUser, {
         email,
         password,
       })
       .then((response) => {
-        const { token } = response.data;
-        login(token);
+        const { id, name, token, role } = response.data;
+        login(id, name, token, role);
         setTimeout(() => {
           setIsLoading(false);
           navigate("/dashboard");

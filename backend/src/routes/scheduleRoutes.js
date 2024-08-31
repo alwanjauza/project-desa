@@ -3,6 +3,8 @@
 const express = require("express");
 const {
   getSchedules,
+  getUpcomingSchedulesHandler,
+  getSchedulesForTodayHandler,
   createSchedule,
   updateScheduleHandler,
   deleteScheduleHandler,
@@ -18,8 +20,14 @@ const router = express.Router();
 // Protect the create schedule route with authMiddleware
 router.post("/schedules", authMiddleware, createSchedule);
 
-// Public route to get all schedules
+// Public route to get all schedules with pagination
 router.get("/schedules", getSchedules);
+
+// Public route to get upcoming schedules
+router.get("/schedules/upcoming", getUpcomingSchedulesHandler);
+
+// Public route to get schedules for today
+router.get("/schedules/today", getSchedulesForTodayHandler);
 
 // Protected route to get a schedule by ID
 router.get("/schedules/:id", getScheduleByIdHandler);

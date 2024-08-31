@@ -5,12 +5,18 @@ import Carousel from "../components/ui/Carousel";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import Statistic from "../components/common/statistic";
+import endPoint from "@/api/apiConfig";
+import Marquee from "react-fast-marquee";
+import { Megaphone } from "lucide-react";
 
 function HomePage() {
   const [jadwalSalat, setJadwalSalat] = useState([]);
+  const [todaySchedule, setTodaySchedule] = useState([]);
   const [berita, setBerita] = useState([]);
   const [kategori, setKategori] = useState("terbaru");
   const [loading, setLoading] = useState(false);
+
+  console.log(todaySchedule);
 
   const sixNews = berita?.posts?.slice(0, 6);
 
@@ -42,6 +48,15 @@ function HomePage() {
       .get(`${"https://api-berita-indonesia.vercel.app/cnn/" + kategori}`)
       .then((res) => {
         setBerita(res?.data?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    axios
+      .get(`${endPoint.getTodaySchedule}`)
+      .then((res) => {
+        setTodaySchedule(res?.data);
       })
       .catch((err) => {
         console.log(err);
@@ -84,6 +99,25 @@ function HomePage() {
           </div>
         </div>
       </div>
+      {todaySchedule?.length > 0 && (
+        <div className='px-4 md:px-8 lg:px-32 mt-5'>
+          <div className='overflow-hidden whitespace-nowrap flex items-center'>
+            <div className='bg-primary flex gap-2 items-center py-1 px-2'>
+              <Megaphone size={24} color='#fff' />
+              <h2 className='text-white font-bold'>Pengumuman</h2>
+            </div>
+            <Marquee
+              gradient={false}
+              pauseOnHover={true}
+              speed={50}
+              className='bg-gray-400 py-1'
+            >
+              Hari ini akan ada kegiatan {todaySchedule[0].title} (
+              {todaySchedule[0].description})
+            </Marquee>
+          </div>
+        </div>
+      )}
       <div className='px-4 py-10 md:px-8 lg:px-32 lg:py-20'>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5'>
           <Link
@@ -158,7 +192,7 @@ function HomePage() {
             <h3 className='text-xl font-bold mt-2'>Pembangunan Desa</h3>
           </Link>
           <Link
-            to='/lokasi'
+            to='/jadwal'
             className='bg-primary p-5 text-white rounded-lg flex flex-col items-center justify-center h-60 hover:bg-secondary hover:cursor-pointer'
           >
             <svg
@@ -171,14 +205,16 @@ function HomePage() {
               strokeWidth='2'
               strokeLinecap='round'
               strokeLinejoin='round'
-              className='icon icon-tabler icon-tabler-map'
+              className='icon icon-tabler icons-tabler-outline icon-tabler-calendar-event'
             >
               <path stroke='none' d='M0 0h24v24H0z' fill='none' />
-              <path d='M3 7l6 -3l6 3l6 -3v13l-6 3l-6 -3l-6 3v-13' />
-              <path d='M9 4v13' />
-              <path d='M15 7v13' />
+              <path d='M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z' />
+              <path d='M16 3l0 4' />
+              <path d='M8 3l0 4' />
+              <path d='M4 11l16 0' />
+              <path d='M8 15h2v2h-2z' />
             </svg>
-            <h3 className='text-xl font-bold mt-2'>Lokasi Desa</h3>
+            <h3 className='text-xl font-bold mt-2'>Jadwal Desa</h3>
           </Link>
         </div>
       </div>

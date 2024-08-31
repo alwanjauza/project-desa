@@ -3,6 +3,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const roleRoutes = require("./routes/roleRoutes");
 const scheduleRoutes = require("./routes/scheduleRoutes");
+const uploadRoutes = require("./routes/imagekitRoutes");
 
 const app = express();
 
@@ -19,5 +20,6 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api", roleRoutes);
 app.use("/api", scheduleRoutes);
+app.use("/api", uploadRoutes);
 
 module.exports = app;

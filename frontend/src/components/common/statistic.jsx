@@ -61,8 +61,8 @@ function Statistic() {
               </Link>
               <Link to='https://www.kemendagri.go.id/' target='_blank'>
                 <img
-                  src='/images/kemendragi.svg'
-                  alt='purworejo'
+                  src='/images/kemendagri.png'
+                  alt='kemendragi'
                   width={100}
                   height={100}
                   className='hover:scale-125 duration-200 hover:cursor-pointer'
@@ -71,7 +71,7 @@ function Statistic() {
               <Link to='https://jatengprov.go.id/' target='_blank'>
                 <img
                   src='/images/jawatengah.svg'
-                  alt='purworejo'
+                  alt='jateng'
                   width={100}
                   height={100}
                   className='hover:scale-125 duration-200 hover:cursor-pointer'

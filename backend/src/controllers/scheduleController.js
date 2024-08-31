@@ -5,13 +5,41 @@ const {
   updateSchedule,
   deleteSchedule,
   getAllSchedules,
+  getUpcomingSchedules,
+  getSchedulesForToday,
   getScheduleById,
 } = require("../services/scheduleService");
 
-// Get all schedules
+// Get all schedules with pagination
 const getSchedules = async (req, res) => {
   try {
-    const schedules = await getAllSchedules();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const { schedules, totalPages } = await getAllSchedules(page, limit);
+
+    res.status(200).json({
+      schedules,
+      totalPages,
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Get upcoming schedules
+const getUpcomingSchedulesHandler = async (req, res) => {
+  try {
+    const schedules = await getUpcomingSchedules();
+    res.status(200).json(schedules);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Get schedules for today
+const getSchedulesForTodayHandler = async (req, res) => {
+  try {
+    const schedules = await getSchedulesForToday();
     res.status(200).json(schedules);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -78,9 +106,10 @@ const getScheduleByIdHandler = async (req, res) => {
 
 module.exports = {
   getSchedules,
+  getUpcomingSchedulesHandler,
+  getSchedulesForTodayHandler,
   createSchedule,
   updateScheduleHandler,
   deleteScheduleHandler,
-  getAllSchedules,
   getScheduleByIdHandler,
 };
