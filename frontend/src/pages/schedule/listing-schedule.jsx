@@ -2,7 +2,6 @@ import endPoint from "@/api/apiConfig";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -66,24 +65,39 @@ function ListingSchedule() {
         schedule.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilterSchedules(filtered);
-  }, [searchTerm, filterSchedules]);
+  }, [searchTerm, schedules]);
 
-  const handleDelete = (id) => {
+  const extractImageId = (url) => {
+    const match = url.match(/\/([^/_]+)_/);
+    return match ? match[1] : null; // Return the first capturing group or null if not found
+  };
+
+  const handleDelete = (schedule) => {
     const userData = JSON.parse(localStorage.getItem("user"));
     const token = userData.token;
 
     axios
-      .delete(`${endPoint.deleteSchedule}/${id}`, {
+      .delete(`${endPoint.deleteSchedule}/${schedule.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then(() => {
-        const updatedSchedules = schedules.filter(
-          (schedule) => schedule.id !== id
-        );
-        setSchedules(updatedSchedules);
-        setFilterSchedules(updatedSchedules);
+        const imageId = extractImageId(schedule.image); // Use schedule.image
+
+        axios
+          .delete(`${endPoint.deleteMedia}/${imageId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then(() => {
+            const updatedSchedules = schedules.filter(
+              (item) => item.id !== schedule.id
+            );
+            setSchedules(updatedSchedules);
+            setFilterSchedules(updatedSchedules);
+          });
       })
       .catch((error) => {
         console.error(error);
@@ -171,7 +185,7 @@ function ListingSchedule() {
                     </button>
                     <button
                       className='bg-red-500 text-white px-2 py-2 rounded ml-2 hover:bg-red-700'
-                      onClick={() => handleDelete(schedule.id)}
+                      onClick={() => handleDelete(schedule)}
                     >
                       <Trash2 size={16} />
                     </button>
