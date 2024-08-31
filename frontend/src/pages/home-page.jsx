@@ -146,7 +146,7 @@ function HomePage() {
             <h3 className='text-xl font-bold mt-2'>Sejarah Desa</h3>
           </Link>
           <Link
-            to='/budaya'
+            to='/perangkat'
             className='bg-primary p-5 text-white rounded-lg flex flex-col items-center justify-center h-60 hover:bg-secondary hover:cursor-pointer'
           >
             <svg
@@ -159,14 +159,17 @@ function HomePage() {
               strokeWidth='2'
               strokeLinecap='round'
               strokeLinejoin='round'
-              className='icon icon-tabler icon-tabler-brand-spacehey'
+              className='icon icon-tabler icons-tabler-outline icon-tabler-users-group'
             >
               <path stroke='none' d='M0 0h24v24H0z' fill='none' />
-              <path d='M17 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0' />
-              <path d='M14 20h6v-6a3 3 0 0 0 -6 0v6z' />
-              <path d='M11 8v2.5a3.5 3.5 0 0 1 -3.5 3.5h-.5a3 3 0 0 1 0 -6h4z' />
+              <path d='M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0' />
+              <path d='M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1' />
+              <path d='M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0' />
+              <path d='M17 10h2a2 2 0 0 1 2 2v1' />
+              <path d='M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0' />
+              <path d='M3 13v-1a2 2 0 0 1 2 -2h2' />
             </svg>
-            <h3 className='text-xl font-bold mt-2'>Budaya Desa</h3>
+            <h3 className='text-xl font-bold mt-2'>Perangkat Desa</h3>
           </Link>
           <Link
             to='/sarana'

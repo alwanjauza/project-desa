@@ -70,16 +70,42 @@ function BudayaPage() {
               setiap tahun pada Bulan Besar Islam.
             </Accordion>
             <Accordion title='Jaran Kepang'>
-              Budaya kesenian tradisional berupa tarian yang menampilkan
-              sekelompok orang yang menunggangi kuda. Tarian Kuda Lumping atau
-              dikenal dalam istilah Jaran Kepang menggunakan kuda tiruan yang
-              terbuat dari bambu yang dihiasi. Budaya tradisional tersebut
-              dilaksanakan pada setiap jum'at kliwon yang dilakukan oleh warga
-              atau pemuda setempat. jaran kepang juga dilaksanakan pada bulan
-              Suro dimakan para pendiri desa Sukogelap. Tujuan dari kegiatan
-              tersebut untuk mengenang jasa-jasa pendahulu dalam mendirikan
-              desa.
+              <div className='flex gap-4'>
+                <div className='flex-shrink-0'>
+                  <img
+                    src='/images/jaranan2.jpg'
+                    alt='jaranan'
+                    className='h-full max-h-[300px] w-auto object-cover'
+                  />
+                </div>
+                <div className='flex flex-col justify-start gap-2'>
+                  <p>
+                    Budaya kesenian tradisional berupa tarian yang menampilkan
+                    sekelompok orang yang menunggangi kuda. Tarian Kuda Lumping
+                    atau dikenal dalam istilah Jaran Kepang menggunakan kuda
+                    tiruan yang terbuat dari bambu yang dihiasi. Budaya
+                    tradisional tersebut dilaksanakan pada setiap Jum'at Kliwon
+                    yang dilakukan oleh warga atau pemuda setempat. Jaran Kepang
+                    juga dilaksanakan pada bulan Suro dimakan para pendiri desa
+                    Sukogelap. Tujuan dari kegiatan tersebut untuk mengenang
+                    jasa-jasa pendahulu dalam mendirikan desa.
+                  </p>
+                  <div className='flex gap-2'>
+                    <img
+                      src='/images/jaranan1.jpg'
+                      alt='jaranan'
+                      className='h-40 w-auto object-cover'
+                    />
+                    <img
+                      src='/images/jaranan3.jpg'
+                      alt='jaranan'
+                      className='h-40 w-auto object-cover'
+                    />
+                  </div>
+                </div>
+              </div>
             </Accordion>
+
             <Accordion title='Hadroh'>
               Merupakan kesenian pertunjukan tradisional dalam budaya islam yang
               melibatkan music dan sholawat yang bersifat religious. Selain

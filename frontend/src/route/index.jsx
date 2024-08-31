@@ -16,6 +16,7 @@ import ListingSchedule from "@/pages/schedule/listing-schedule";
 import NewSchedule from "@/pages/schedule/new-schedule";
 import UpdateSchedule from "@/pages/schedule/update-schedule";
 import SchedulesPage from "@/pages/schedules-page";
+import PengurusPage from "@/pages/pengurus-page";
 
 const AppRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -130,6 +131,14 @@ const AppRoute = () => {
         element={
           <AppLayout>
             <SchedulesPage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path='/perangkat'
+        element={
+          <AppLayout>
+            <PengurusPage />
           </AppLayout>
         }
       />
