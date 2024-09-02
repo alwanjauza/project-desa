@@ -5,19 +5,22 @@ const prisma = require("../prisma/client");
 // Add a new schedule
 const addSchedule = async (title, description, date, image, authorId) => {
   if (!authorId) {
-    throw new Error("Author ID is required."); // Ensure authorId is provided
+    throw new Error("Author ID is required.");
   }
 
-  return await prisma.schedule.create({
-    data: {
-      title,
-      description,
-      date: new Date(date), // Ensure the date is in the correct format
-      image,
-      author: {
-        connect: { id: authorId }, // Use the provided authorId to connect the schedule to the author
-      },
+  // Prepare data object with image field set to null if not provided
+  const data = {
+    title,
+    description,
+    date: new Date(date),
+    image: image || null, // Ensure image is always defined, defaulting to null if not provided
+    author: {
+      connect: { id: authorId },
     },
+  };
+
+  return await prisma.schedule.create({
+    data,
   });
 };
 

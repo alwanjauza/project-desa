@@ -1,73 +1,64 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import endPoint from "@/api/apiConfig";
 import axios from "axios";
 import { LoaderCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-function NewSchedule() {
-  const [authorId, setAuthorId] = useState("");
+function ProfilePage() {
+  const [user, setUser] = useState({ name: "", email: "" });
   const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
 
   const navigate = useNavigate();
+  const { id } = useParams();
 
   useEffect(() => {
-    // Retrieve authorId from localStorage
+    // Retrieve user data from localStorage
     const userData = JSON.parse(localStorage.getItem("user"));
-    setAuthorId(parseInt(userData.id, 10));
     setToken(userData.token);
-  }, []);
 
-  const handleImageChange = (event) => {
-    setSelectedImage(event.target.files[0]);
-  };
+    axios
+      .get(`${endPoint.getUser}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      })
+      .then((response) => {
+        setUser(response.data); // Set user data to state
+      })
+      .catch((error) => {
+        console.error("Error during fetch user:", error);
+      });
+  }, [id]);
 
   const onSubmit = async (event) => {
     event.preventDefault();
+
     setIsLoading(true);
 
-    try {
-      let imageUrl = null;
-
-      if (selectedImage) {
-        // Step 1: Upload the image
-        const formData = new FormData();
-        formData.append("image", selectedImage);
-
-        const uploadResponse = await axios.post(endPoint.uploadMedia, formData);
-
-        // Step 2: Extract the URL from the response
-        imageUrl = uploadResponse.data.data;
-      }
-
-      // Step 3: Prepare the form data to save in your database
-      const formElement = event.target.elements;
-      const requestData = {
-        title: formElement.title.value,
-        description: formElement.description.value,
-        date: formElement.date.value,
-        authorId: authorId,
-        ...(imageUrl && { image: imageUrl }), // Only include the image field if an image was uploaded
-      };
-
-      // Step 4: Send the data to your database
-      await axios.post(endPoint.createSchedule, requestData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+    axios
+      .put(
+        `${endPoint.updateProfile}/${id}`,
+        {
+          name: event.target.name.value,
+          email: event.target.email.value,
         },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(() => {
+        setIsLoading(false);
+        navigate("/dashboard/schedule");
+      })
+      .catch((error) => {
+        console.error("Error during submission:", error);
+        setIsLoading(false);
       });
-
-      // Handle success
-      setIsLoading(false);
-      navigate("/dashboard/schedule");
-    } catch (error) {
-      console.error("Error during submission:", error);
-      setIsLoading(false);
-    }
   };
 
   const handleBack = () => {
@@ -104,83 +95,55 @@ function NewSchedule() {
               <p className='translate-x-2'>Go Back</p>
             </button>
             <h1 className='text-2xl font-bold text-center mb-4'>
-              Kegiatan Baru
+              Update Profile
             </h1>
             <form method='POST' action='#' onSubmit={onSubmit}>
-              {/* Title */}
+              {/* Name */}
               <div>
                 <label
                   className='block text-sm font-medium text-gray-700'
-                  htmlFor='title'
+                  htmlFor='name'
                 >
-                  Judul Kegiatan
+                  Nama
                 </label>
                 <div className='mt-1'>
                   <Input
                     className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none  sm:text-sm'
                     required
                     type='text'
-                    name='title'
-                    id='title'
-                    placeholder='Masukkan nama kegiatan'
+                    name='name'
+                    id='name'
+                    placeholder='Masukkan nama'
+                    value={user.name}
+                    onChange={(e) => setUser({ ...user, name: e.target.value })}
                   />
                 </div>
               </div>
-              {/* Image URL */}
-              <div className='mt-6'>
+
+              {/* Email */}
+              <div className='mt-4'>
                 <label
                   className='block text-sm font-medium text-gray-700'
-                  htmlFor='image'
+                  htmlFor='email'
                 >
-                  Gambar Kegiatan
-                </label>
-                <div className='mt-1'>
-                  <input
-                    onChange={handleImageChange}
-                    id='image'
-                    type='file'
-                    accept='.jpg, .jpeg, .png'
-                    className='flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm text-gray-400 file:border-0 file:bg-transparent file:text-gray-600 file:text-sm file:font-medium'
-                  />
-                </div>
-              </div>
-              {/* Date */}
-              <div className='mt-6'>
-                <label
-                  className='block text-sm font-medium text-gray-700'
-                  htmlFor='date'
-                >
-                  Tanggal Acara
+                  Nama
                 </label>
                 <div className='mt-1'>
                   <Input
                     className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none  sm:text-sm'
                     required
-                    type='date'
-                    name='date'
-                    id='date'
+                    type='email'
+                    name='email'
+                    id='email'
+                    placeholder='Masukkan email'
+                    value={user.email}
+                    onChange={(e) =>
+                      setUser({ ...user, email: e.target.value })
+                    }
                   />
                 </div>
               </div>
-              {/* Description */}
-              <div className='mt-6'>
-                <label
-                  className='block text-sm font-medium text-gray-700'
-                  htmlFor='description'
-                >
-                  Description
-                </label>
-                <div className='mt-1'>
-                  <Textarea
-                    className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none  sm:text-sm'
-                    required
-                    type='text'
-                    name='description'
-                    id='description'
-                    placeholder='Masukkan deskripsi kegiatan'
-                  />
-                </div>
-              </div>
+
               {/* Submit Button */}
               <div className='mt-6'>
                 <Button
@@ -203,4 +166,4 @@ function NewSchedule() {
   );
 }
 
-export default NewSchedule;
+export default ProfilePage;

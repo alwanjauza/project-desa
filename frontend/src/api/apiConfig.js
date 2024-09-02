@@ -2,8 +2,10 @@ const API_BASE_URL = "http://localhost:5000/api";
 
 const endPoint = {
   // Auth
-  getUser: `${API_BASE_URL}/auth/login`,
-  registerUser: `${API_BASE_URL}/auth/register`,
+  login: `${API_BASE_URL}/login`,
+  registerUser: `${API_BASE_URL}/register`,
+  getUser: `${API_BASE_URL}/users`,
+  updateProfile: `${API_BASE_URL}/users/profile`,
 
   // Schedule
   createSchedule: `${API_BASE_URL}/schedules`,

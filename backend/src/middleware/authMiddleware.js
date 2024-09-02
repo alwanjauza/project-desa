@@ -21,6 +21,7 @@ const authMiddleware = (req, res, next) => {
 
 // Middleware to restrict access to Super Admin only
 const superAdminOnly = (req, res, next) => {
+  console.log("User role:", req.user.role); // Log user's role
   if (req.user.role !== "Super Admin") {
     return res
       .status(403)

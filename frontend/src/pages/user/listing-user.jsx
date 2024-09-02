@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import endPoint from "@/api/apiConfig";
 import {
   Table,
@@ -7,6 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import axios from "axios";
+import { ChevronLeft, ChevronRight, Pencil, Plus, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,44 +22,31 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import axios from "axios";
-import { ChevronLeft, ChevronRight, Pencil, Plus, Trash2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-function ListingSchedule() {
-  const [schedules, setSchedules] = useState([]);
+function ListingUser() {
+  const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [filterSchedules, setFilterSchedules] = useState([]);
+  const [filterUsers, setFilterUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
-  const formatDate = (isoDate) => {
-    const date = new Date(isoDate);
-    const day = String(date.getUTCDate()).padStart(2, "0");
-    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-    const year = date.getUTCFullYear();
-    return `${day}-${month}-${year}`;
-  };
-
-  const fetchSchedules = (page = 1) => {
+  const fetchUsers = (page = 1) => {
     setIsLoading(true);
     const userData = JSON.parse(localStorage.getItem("user"));
     const token = userData.token;
 
     axios
-      .get(`${endPoint.getSchedule}?page=${page}&limit=10`, {
+      .get(`${endPoint.getUser}?page=${page}&limit=10`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        setSchedules(response?.data?.schedules);
-        setFilterSchedules(response?.data?.schedules);
+        setUsers(response?.data?.users); // Store the original list of users
         setTotalPages(response?.data?.totalPages);
         setIsLoading(false);
       })
@@ -66,64 +57,20 @@ function ListingSchedule() {
   };
 
   useEffect(() => {
-    fetchSchedules(page);
+    fetchUsers(page);
   }, [page]);
 
+  // Handle filtering when searchTerm or users change
   useEffect(() => {
-    const filtered = schedules.filter(
-      (schedule) =>
-        schedule.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        schedule.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilterSchedules(filtered);
-  }, [searchTerm, schedules]);
-
-  const extractImageId = (url) => {
-    const match = url.match(/\/([^/_]+)_/);
-    return match ? match[1] : null; // Return the first capturing group or null if not found
-  };
-
-  const handleDelete = async (schedule) => {
-    try {
-      const userData = JSON.parse(localStorage.getItem("user"));
-      const token = userData.token;
-
-      // Delete the schedule
-      await axios.delete(`${endPoint.deleteSchedule}/${schedule.id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      // If there is an image, delete it
-      if (schedule.image) {
-        const imageId = extractImageId(schedule.image);
-
-        await axios.delete(`${endPoint.deleteMedia}/${imageId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
-
-      // Update the schedules list
-      const updatedSchedules = filterSchedules.filter(
-        (item) => item.id !== schedule.id
+    if (searchTerm === "") {
+      setFilterUsers(users); // No search term, show all users
+    } else {
+      const filtered = users.filter((user) =>
+        user?.name?.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setSchedules(updatedSchedules);
-      setFilterSchedules(updatedSchedules);
-    } catch (error) {
-      console.error("Error during delete operation:", error);
+      setFilterUsers(filtered);
     }
-  };
-
-  const handleNew = () => {
-    navigate("/dashboard/schedule/new");
-  };
-
-  const handleEdit = (id) => {
-    navigate(`/dashboard/schedule/update/${id}`);
-  };
+  }, [searchTerm, users]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -131,16 +78,44 @@ function ListingSchedule() {
     }
   };
 
+  const handleNew = () => {
+    navigate("/dashboard/user/new");
+  };
+
+  const handleEdit = (id) => {
+    navigate(`/dashboard/user/update/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    const userData = JSON.parse(localStorage.getItem("user"));
+    const token = userData.token;
+
+    axios
+      .delete(`${endPoint.getUser}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        const updatedUsers = users.filter((u) => u.id !== id);
+        setUsers(updatedUsers);
+        setFilterUsers(updatedUsers);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  };
+
   return (
     <div className='p-4 font-Poppins'>
       <h1 className='text-2xl font-bold text-center mb-4'>
-        INI PAGE LISTING SCHEDULE
+        INI PAGE LISTING USER
       </h1>
 
       <div className='flex justify-between mb-4'>
         <input
           type='text'
-          placeholder='Search by title or description...'
+          placeholder='Search by name...'
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className='border rounded px-4 py-2 w-1/2'
@@ -150,7 +125,7 @@ function ListingSchedule() {
           onClick={handleNew}
         >
           <Plus size={16} />
-          Add New Schedule
+          Add New User
         </button>
       </div>
 
@@ -161,40 +136,40 @@ function ListingSchedule() {
           </div>
         </div>
       ) : error ? (
-        <p className='text-red-500'>{error}</p>
+        <p className='text-red-500'>{error.message}</p>
       ) : (
         <>
           <Table className='min-w-full bg-white border border-gray-300'>
             <TableHeader>
               <TableRow>
                 <TableHead className='px-4 py-2 border-b'>No</TableHead>
-                <TableHead className='px-4 py-2 border-b'>Judul</TableHead>
-                <TableHead className='px-4 py-2 border-b'>Tanggal</TableHead>
-                <TableHead className='px-4 py-2 border-b'>Deskripsi</TableHead>
+                <TableHead className='px-4 py-2 border-b'>Nama</TableHead>
+                <TableHead className='px-4 py-2 border-b'>Email</TableHead>
+                <TableHead className='px-4 py-2 border-b'>Role</TableHead>
                 <TableHead className='px-4 py-2 border-b'>Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filterSchedules?.map((schedule, index) => (
-                <TableRow key={schedule.id}>
-                  <TableCell className='px-4 py-2 border-b text-center'>
+              {filterUsers?.map((user, index) => (
+                <TableRow key={user.id}>
+                  <TableCell className='px-4 py-2 border-b'>
                     {(page - 1) * 10 + index + 1}
                   </TableCell>
                   <TableCell className='px-4 py-2 border-b whitespace-nowrap'>
-                    {schedule.title}
+                    {user?.name}
                   </TableCell>
-                  <TableCell className='px-4 py-2 border-b whitespace-nowrap text-center'>
-                    {formatDate(schedule.date)}
+                  <TableCell className='px-4 py-2 border-b whitespace-nowrap'>
+                    {user?.email}
                   </TableCell>
-                  <TableCell className='px-4 py-2 border-b line-clamp-3'>
-                    {schedule.description}
+                  <TableCell className='px-4 py-2 border-b whitespace-nowrap'>
+                    {user?.role?.role}
                   </TableCell>
                   <TableCell className='px-4 py-2 border-b whitespace-nowrap'>
                     <div className='flex items-center space-x-2'>
                       {/* Edit Button */}
                       <button
                         className='bg-yellow-400 text-white px-2 py-2 rounded hover:bg-yellow-500'
-                        onClick={() => handleEdit(schedule?.id)}
+                        onClick={() => handleEdit(user?.id)}
                       >
                         <Pencil size={16} />
                       </button>
@@ -211,17 +186,17 @@ function ListingSchedule() {
                         <AlertDialogContent>
                           <AlertDialogHeader>
                             <AlertDialogTitle>
-                              Apakah Anda yakin ingin menghapus jadwal ini?
+                              Apakah Anda yakin ingin menghapus user ini?
                             </AlertDialogTitle>
                             <AlertDialogDescription>
                               Aksi ini tidak dapat dibatalkan. Ini akan
-                              menghapus jadwal dan data terkait secara permanen.
+                              menghapus user dan data terkait secara permanen.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction asChild>
-                              <button onClick={() => handleDelete(schedule)}>
+                              <button onClick={() => handleDelete(user?.id)}>
                                 Hapus
                               </button>
                             </AlertDialogAction>
@@ -257,4 +232,4 @@ function ListingSchedule() {
   );
 }
 
-export default ListingSchedule;
+export default ListingUser;

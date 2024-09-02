@@ -27,7 +27,7 @@ const LoginPage = () => {
     setIsLoading(true);
 
     axios
-      .post(endPoint.getUser, {
+      .post(endPoint.login, {
         email,
         password,
       })
@@ -36,7 +36,7 @@ const LoginPage = () => {
         login(id, name, token, role);
         setTimeout(() => {
           setIsLoading(false);
-          navigate("/dashboard");
+          navigate("/dashboard/schedule");
         }, 2000);
       })
       .catch((error) => {

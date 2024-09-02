@@ -1,73 +1,83 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import endPoint from "@/api/apiConfig";
 import axios from "axios";
 import { LoaderCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function NewSchedule() {
-  const [authorId, setAuthorId] = useState("");
+function NewPassPage() {
   const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (rePassword && e.target.value !== rePassword) {
+      setPasswordError("Passwords tidak sama!");
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  const handleRePasswordChange = (e) => {
+    setRePassword(e.target.value);
+    if (password && e.target.value !== password) {
+      setPasswordError("Passwords tidak sama!");
+    } else {
+      setPasswordError("");
+    }
+  };
 
   useEffect(() => {
-    // Retrieve authorId from localStorage
     const userData = JSON.parse(localStorage.getItem("user"));
-    setAuthorId(parseInt(userData.id, 10));
     setToken(userData.token);
-  }, []);
-
-  const handleImageChange = (event) => {
-    setSelectedImage(event.target.files[0]);
-  };
+  }, [id]);
 
   const onSubmit = async (event) => {
     event.preventDefault();
+
     setIsLoading(true);
 
-    try {
-      let imageUrl = null;
-
-      if (selectedImage) {
-        // Step 1: Upload the image
-        const formData = new FormData();
-        formData.append("image", selectedImage);
-
-        const uploadResponse = await axios.post(endPoint.uploadMedia, formData);
-
-        // Step 2: Extract the URL from the response
-        imageUrl = uploadResponse.data.data;
-      }
-
-      // Step 3: Prepare the form data to save in your database
-      const formElement = event.target.elements;
-      const requestData = {
-        title: formElement.title.value,
-        description: formElement.description.value,
-        date: formElement.date.value,
-        authorId: authorId,
-        ...(imageUrl && { image: imageUrl }), // Only include the image field if an image was uploaded
-      };
-
-      // Step 4: Send the data to your database
-      await axios.post(endPoint.createSchedule, requestData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+    axios
+      .put(
+        `${endPoint.updateProfile}/${id}`,
+        {
+          oldPassword: event.target.oldPassword.value,
+          newPassword: event.target.newPassword.value,
         },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(() => {
+        setIsLoading(false);
+        setPassword("");
+        setRePassword("");
+        toast.success("Password berhasil diubah!", {
+          position: "top-right",
+          autoClose: 3000,
+          theme: "colored",
+        });
+      })
+      .catch((error) => {
+        console.error("Error during submission:", error);
+        toast.error("Password gagal diubah!", {
+          position: "top-right",
+          autoClose: 3000,
+          theme: "colored",
+        });
+        setIsLoading(false);
       });
-
-      // Handle success
-      setIsLoading(false);
-      navigate("/dashboard/schedule");
-    } catch (error) {
-      console.error("Error during submission:", error);
-      setIsLoading(false);
-    }
   };
 
   const handleBack = () => {
@@ -104,87 +114,82 @@ function NewSchedule() {
               <p className='translate-x-2'>Go Back</p>
             </button>
             <h1 className='text-2xl font-bold text-center mb-4'>
-              Kegiatan Baru
+              Update Password
             </h1>
+            <ToastContainer />
             <form method='POST' action='#' onSubmit={onSubmit}>
-              {/* Title */}
+              {/* Name */}
               <div>
                 <label
                   className='block text-sm font-medium text-gray-700'
-                  htmlFor='title'
+                  htmlFor='oldPassword'
                 >
-                  Judul Kegiatan
+                  Sandi Saat Ini
                 </label>
                 <div className='mt-1'>
                   <Input
                     className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none  sm:text-sm'
                     required
-                    type='text'
-                    name='title'
-                    id='title'
-                    placeholder='Masukkan nama kegiatan'
+                    type='password'
+                    name='oldPassword'
+                    id='oldPassword'
+                    placeholder='Masukkan sandi saat ini'
                   />
                 </div>
               </div>
-              {/* Image URL */}
-              <div className='mt-6'>
+
+              {/* Password */}
+              <div className='mt-4'>
                 <label
                   className='block text-sm font-medium text-gray-700'
-                  htmlFor='image'
+                  htmlFor='newPassword'
                 >
-                  Gambar Kegiatan
-                </label>
-                <div className='mt-1'>
-                  <input
-                    onChange={handleImageChange}
-                    id='image'
-                    type='file'
-                    accept='.jpg, .jpeg, .png'
-                    className='flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm text-gray-400 file:border-0 file:bg-transparent file:text-gray-600 file:text-sm file:font-medium'
-                  />
-                </div>
-              </div>
-              {/* Date */}
-              <div className='mt-6'>
-                <label
-                  className='block text-sm font-medium text-gray-700'
-                  htmlFor='date'
-                >
-                  Tanggal Acara
+                  Kata Sandi Baru
                 </label>
                 <div className='mt-1'>
                   <Input
                     className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none  sm:text-sm'
                     required
-                    type='date'
-                    name='date'
-                    id='date'
+                    type='password'
+                    name='newPassword'
+                    id='newPassword'
+                    placeholder='Masukkan sandi baru'
+                    value={password}
+                    onChange={handlePasswordChange}
                   />
                 </div>
               </div>
-              {/* Description */}
-              <div className='mt-6'>
+
+              {/* Email */}
+              <div className='mt-4'>
                 <label
                   className='block text-sm font-medium text-gray-700'
-                  htmlFor='description'
+                  htmlFor='repeatPassword'
                 >
-                  Description
+                  Ulangi Sandi Baru
                 </label>
                 <div className='mt-1'>
-                  <Textarea
+                  <Input
                     className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none  sm:text-sm'
                     required
-                    type='text'
-                    name='description'
-                    id='description'
-                    placeholder='Masukkan deskripsi kegiatan'
+                    type='password'
+                    name='repeatPassword'
+                    id='repeatPassword'
+                    placeholder='Ulangi sandi baru'
+                    value={rePassword}
+                    onChange={handleRePasswordChange}
                   />
                 </div>
               </div>
+
+              {passwordError && (
+                <p className='text-red-500 text-sm mt-2'>{passwordError}</p>
+              )}
+
               {/* Submit Button */}
               <div className='mt-6'>
                 <Button
-                  disabled={isLoading}
+                  disabled={isLoading || passwordError}
                   className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                   type='submit'
                 >
@@ -203,4 +208,4 @@ function NewSchedule() {
   );
 }
 
-export default NewSchedule;
+export default NewPassPage;

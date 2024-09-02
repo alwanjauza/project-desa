@@ -17,6 +17,11 @@ import NewSchedule from "@/pages/schedule/new-schedule";
 import UpdateSchedule from "@/pages/schedule/update-schedule";
 import SchedulesPage from "@/pages/schedules-page";
 import PengurusPage from "@/pages/pengurus-page";
+import ListingUser from "@/pages/user/listing-user";
+import NewUser from "@/pages/user/new-user";
+import UpdateUser from "@/pages/user/update-user";
+import ProfilePage from "@/pages/user/profile/profile-page";
+import NewPassPage from "@/pages/user/profile/newpass-page";
 
 const AppRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +43,30 @@ const AppRoute = () => {
     <Routes>
       <Route path='*' element={<NotFoundPage />} />
       <Route path='/auth/login' element={<LoginPage />} />
+      <Route
+        path='/profile/:id'
+        element={
+          <ProtectedRoute
+            element={
+              <Sidebar>
+                <ProfilePage />
+              </Sidebar>
+            }
+          />
+        }
+      />
+      <Route
+        path='/profile/newpassword/:id'
+        element={
+          <ProtectedRoute
+            element={
+              <Sidebar>
+                <NewPassPage />
+              </Sidebar>
+            }
+          />
+        }
+      />
       <Route
         path='/dashboard'
         element={
@@ -81,6 +110,42 @@ const AppRoute = () => {
             element={
               <Sidebar>
                 <UpdateSchedule />
+              </Sidebar>
+            }
+          />
+        }
+      />
+      <Route
+        path='/dashboard/user'
+        element={
+          <ProtectedRoute
+            element={
+              <Sidebar>
+                <ListingUser />
+              </Sidebar>
+            }
+          />
+        }
+      />
+      <Route
+        path='/dashboard/user/new'
+        element={
+          <ProtectedRoute
+            element={
+              <Sidebar>
+                <NewUser />
+              </Sidebar>
+            }
+          />
+        }
+      />
+      <Route
+        path='/dashboard/user/update/:id'
+        element={
+          <ProtectedRoute
+            element={
+              <Sidebar>
+                <UpdateUser />
               </Sidebar>
             }
           />

@@ -7,15 +7,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { CalendarCheck, ChevronLeft, ChevronRight } from "lucide-react"; // Importing icons from lucide-react
 
 const Sidebar = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [id, setId] = useState(null);
+  const [role, setRole] = useState(null);
 
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user"));
+    setId(userData?.id);
+    setRole(userData?.role);
+  }, [id]);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -26,11 +36,33 @@ const Sidebar = ({ children }) => {
     navigate("/auth/login");
   };
 
+  const getHeaderText = () => {
+    const path = location.pathname;
+
+    if (path === "/dashboard/user") {
+      return "User";
+    } else if (path === "/dashboard/user/new") {
+      return "Buat User";
+    } else if (/^\/dashboard\/user\/update\/\d+$/.test(path)) {
+      return "Update User";
+    } else if (path === "/dashboard/schedule") {
+      return "Schedule";
+    } else if (path === "/dashboard/schedule/new") {
+      return "Buat Schedule";
+    } else if (/^\/dashboard\/schedule\/update\/\d+$/.test(path)) {
+      return "Update Schedule";
+    } else if (/^\/profile\/\d+$/.test(path)) {
+      return "Update Profile";
+    } else {
+      return "Dashboard";
+    }
+  };
+
   return (
     <div className='flex h-screen font-Poppins'>
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full bg-gray-800 text-white flex flex-col transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-full bg-[#070F2B] text-white flex flex-col transition-transform duration-300 ${
           sidebarOpen ? "w-64" : "w-20"
         } z-30`}
       >
@@ -49,81 +81,58 @@ const Sidebar = ({ children }) => {
               <h1>SUKOGELAP</h1>
               <p>KEMIRI - PURWOREJO</p>
             </div>
-            <button
-              onClick={toggleSidebar}
-              className='lg:hidden p-2 rounded hover:bg-gray-700'
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='24'
-                height='24'
-                viewBox='0 0 24 24'
-                fill='none'
-                stroke='currentColor'
-                strokeWidth='2'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                className='feather feather-menu'
-              >
-                <path d='M3 12h18M3 6h18M3 18h18' />
-              </svg>
-            </button>
           </div>
           <nav className='flex-1'>
             <ul className='mt-6'>
+              {role === "Super Admin" && (
+                <li>
+                  <Link
+                    to='/dashboard/user'
+                    className='flex items-center gap-4 py-2.5 px-4 text-gray-200 hover:bg-gray-700'
+                  >
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='24'
+                      height='24'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      className='icon icon-tabler icons-tabler-outline icon-tabler-user'
+                    >
+                      <path stroke='none' d='M0 0h24v24H0z' fill='none' />
+                      <path d='M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0' />
+                      <path d='M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2' />
+                    </svg>
+                    {sidebarOpen && "Pengguna"}
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link
-                  to='/dashboard/pengguna'
+                  to='/dashboard/schedule'
                   className='flex items-center gap-4 py-2.5 px-4 text-gray-200 hover:bg-gray-700'
                 >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='24'
-                    height='24'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeWidth='2'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    className='icon icon-tabler icons-tabler-outline icon-tabler-user'
-                  >
-                    <path stroke='none' d='M0 0h24v24H0z' fill='none' />
-                    <path d='M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0' />
-                    <path d='M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2' />
-                  </svg>
-                  {sidebarOpen && "Pengguna"}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to='/dashboard/artikel'
-                  className='flex items-center gap-4 py-2.5 px-4 text-gray-200 hover:bg-gray-700'
-                >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='24'
-                    height='24'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeWidth='2'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    className='icon icon-tabler icons-tabler-outline icon-tabler-article'
-                  >
-                    <path stroke='none' d='M0 0h24v24H0z' fill='none' />
-                    <path d='M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z' />
-                    <path d='M7 8h10' />
-                    <path d='M7 12h10' />
-                    <path d='M7 16h10' />
-                  </svg>
-                  {sidebarOpen && "Artikel"}
+                  <CalendarCheck />
+                  {sidebarOpen && "Kegiatan"}
                 </Link>
               </li>
             </ul>
           </nav>
         </div>
+        {/* Toggle Button */}
+        <button
+          onClick={toggleSidebar}
+          className='p-2 hover:bg-gray-700 transition-colors duration-300 flex items-center justify-center'
+        >
+          {sidebarOpen ? (
+            <ChevronLeft className='text-white' />
+          ) : (
+            <ChevronRight className='text-white' />
+          )}
+        </button>
       </aside>
 
       {/* Main Content */}
@@ -133,32 +142,13 @@ const Sidebar = ({ children }) => {
         }`}
       >
         {/* Navbar */}
-        <header className='bg-gray-900 text-white p-4 flex items-center justify-between px-10'>
-          <button
-            onClick={toggleSidebar}
-            className='lg:hidden p-2 rounded hover:bg-gray-700'
-          >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              width='24'
-              height='24'
-              viewBox='0 0 24 24'
-              fill='none'
-              stroke='currentColor'
-              strokeWidth='2'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              className='feather feather-menu'
-            >
-              <path d='M3 12h18M3 6h18M3 18h18' />
-            </svg>
-          </button>
-          <div className='text-lg font-semibold'>Dashboard</div>
+        <header className='bg-[#070F2B] text-white p-4 flex items-center justify-between px-10'>
+          <div className='text-lg font-semibold'>{getHeaderText()}</div>
           <div>
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Avatar>
-                  <AvatarImage src='https://github.com/shadcn.png' />
+                  <AvatarImage src={<Avatar />} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
@@ -166,7 +156,14 @@ const Sidebar = ({ children }) => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <span>Profile</span>
+                  <Link to={`/profile/${id}`}>
+                    <span>Profile</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to={`/profile/newpassword/${id}`}>
+                    <span>Change Password</span>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
@@ -200,9 +197,9 @@ const Sidebar = ({ children }) => {
         <main className='flex-1 p-6 bg-gray-100'>{children}</main>
 
         {/* Footer */}
-        <footer className='bg-gray-800 text-white p-4'>
+        <footer className='bg-[#070F2B] text-white p-4'>
           <div className='container mx-auto text-center'>
-            © 2024 Your Company. All rights reserved.
+            © 2024 Sukogelap - Kemiri - Purworejo. All rights reserved.
           </div>
         </footer>
       </div>
