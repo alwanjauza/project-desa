@@ -10,6 +10,8 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -37,11 +39,19 @@ const LoginPage = () => {
         setTimeout(() => {
           setIsLoading(false);
           navigate("/dashboard/schedule");
-        }, 2000);
+        }, 3000);
+        setIsSuccess(true);
+        setTimeout(() => {
+          setIsSuccess(false);
+        }, 3000);
       })
       .catch((error) => {
         setIsLoading(false);
         console.error(error);
+        setError(true);
+        setTimeout(() => {
+          setError(false);
+        }, 3000);
       });
   };
 
@@ -131,6 +141,18 @@ const LoginPage = () => {
               )}
             </div>
           </div>
+          {error && (
+            <div className={`bg-red-500 text-white px-4 py-3 mb-4 rounded-md`}>
+              Email atau Password Salah!!
+            </div>
+          )}
+          {isSuccess && (
+            <div
+              className={`bg-green-800 text-white px-4 py-3 mb-4 rounded-md`}
+            >
+              Logged In...
+            </div>
+          )}
           <div className='flex items-center justify-between'>
             <Button
               type='submit'

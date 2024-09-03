@@ -1,23 +1,22 @@
 import endPoint from "@/api/apiConfig";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import axios from "axios";
+import { Calendar, User } from "lucide-react";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ReactTyped } from "react-typed";
 
-function SchedulesPage() {
+function DetilSchedule() {
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
+  const { id } = useParams();
 
   useEffect(() => {
     setLoading(true);
 
     axios
-      .get(`${endPoint.getUpComingSchedule}`)
+      .get(`${endPoint.getSchedule}/${id}`)
       .then((res) => {
         setSchedules(res.data);
         setLoading(false);
@@ -27,6 +26,8 @@ function SchedulesPage() {
         setLoading(false);
       });
   }, []);
+
+  console.log(schedules);
 
   return (
     <div className='bg-[#f3f3f3]'>
@@ -64,7 +65,13 @@ function SchedulesPage() {
             <path d='M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6' />
           </svg>
         </Link>
-        <p>/ Jadwal Kegiatan</p>
+        <p>
+          /{" "}
+          <Link to='/jadwal' className='text-primary hover:cursor-pointer'>
+            Jadwal Kegiatan
+          </Link>{" "}
+          / {schedules?.title}
+        </p>
       </div>
       <div className='bg-white px-4 md:px-8 lg:px-32'>
         <div className='py-10'>
@@ -82,24 +89,33 @@ function SchedulesPage() {
                 </div>
               </div>
             ) : (
-              <ScrollArea className='h-96 w-full rounded-md border py-2 px-2'>
-                {schedules?.map((schedule) => (
-                  <div
-                    id={schedule?.id}
-                    className='my-2 hover:cursor-pointer'
-                    onClick={() => navigate(`/jadwal/${schedule?.id}`)}
-                  >
-                    <div className='flex justify-between'>
-                      <h1 className='text-xl font-bold'>{schedule?.title}</h1>
-                      <p>{moment(schedule?.date).format("DD-MM-YYYY")}</p>
+              <div className='bg-white shadow-md rounded-lg overflow-hidden'>
+                <img
+                  src={
+                    schedules?.image ? schedules?.image : "/images/no-image.jpg"
+                  }
+                  alt={schedules?.title ? schedules?.title : "No Image"}
+                  className='w-full h-full object-cover'
+                />
+                <div className='p-6'>
+                  <h2 className='text-2xl font-bold text-primary mb-2'>
+                    {schedules?.title}
+                  </h2>
+                  <div className='flex items-center justify-between text-gray-500 text-sm mb-4'>
+                    <div className='flex items-center'>
+                      <User className='w-4 h-4 mr-1' />
+                      <p>{schedules?.author?.name}</p>
                     </div>
-                    <p className='text-gray-400 truncate w-40'>
-                      {schedule?.description}
-                    </p>
-                    <Separator className='mt-2' />
+                    <div className='flex items-center'>
+                      <Calendar className='w-4 h-4 mr-1' />
+                      <p>{moment(schedules?.date).format("DD-MM-YYYY")}</p>
+                    </div>
                   </div>
-                ))}
-              </ScrollArea>
+                  <p className='text-gray-700 text-justify'>
+                    {schedules?.description}
+                  </p>
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -108,4 +124,4 @@ function SchedulesPage() {
   );
 }
 
-export default SchedulesPage;
+export default DetilSchedule;

@@ -33,19 +33,9 @@ router.get("/schedules/today", getSchedulesForTodayHandler);
 router.get("/schedules/:id", getScheduleByIdHandler);
 
 // Protected route to update a schedule
-router.put(
-  "/schedules/:id",
-  authMiddleware,
-  superAdminOnly,
-  updateScheduleHandler
-);
+router.put("/schedules/:id", authMiddleware, updateScheduleHandler);
 
 // Protected route to delete a schedule
-router.delete(
-  "/schedules/:id",
-  authMiddleware,
-  superAdminOnly,
-  deleteScheduleHandler
-);
+router.delete("/schedules/:id", authMiddleware, deleteScheduleHandler);
 
 module.exports = router;

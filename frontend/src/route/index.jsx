@@ -22,6 +22,7 @@ import NewUser from "@/pages/user/new-user";
 import UpdateUser from "@/pages/user/update-user";
 import ProfilePage from "@/pages/user/profile/profile-page";
 import NewPassPage from "@/pages/user/profile/newpass-page";
+import DetilSchedule from "@/pages/detail-schedule-page";
 
 const AppRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -196,6 +197,14 @@ const AppRoute = () => {
         element={
           <AppLayout>
             <SchedulesPage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path='/jadwal/:id'
+        element={
+          <AppLayout>
+            <DetilSchedule />
           </AppLayout>
         }
       />
