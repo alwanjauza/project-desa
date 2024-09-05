@@ -48,7 +48,7 @@ function NewPassPage() {
 
     axios
       .put(
-        `${endPoint.updateProfile}/${id}`,
+        `${endPoint.updatePassword}/${id}`,
         {
           oldPassword: event.target.oldPassword.value,
           newPassword: event.target.newPassword.value,

@@ -36,7 +36,7 @@ function HomePage() {
 
   useEffect(() => {
     axios
-      .get("http://api.aladhan.com/v1/timingsByAddress?address=purworejo")
+      .get("https://api.aladhan.com/v1/timingsByAddress?address=purworejo")
       .then((res) => {
         setJadwalSalat(res?.data?.data);
       })

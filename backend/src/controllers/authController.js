@@ -22,7 +22,7 @@ const login = async (req, res) => {
     const { token, id, name, role } = await loginUser(req.body);
     res.json({ token, id, name, role });
   } catch (error) {
-    res.status(401).json({ error: "Invalid credentials" });
+    res.status(401).json({ error: error });
   }
 };
 

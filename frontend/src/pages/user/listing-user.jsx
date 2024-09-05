@@ -47,7 +47,7 @@ function ListingUser() {
       })
       .then((response) => {
         setUsers(response?.data?.users); // Store the original list of users
-        setTotalPages(response?.data?.totalPages);
+        setTotalPages(response?.data?.pagination?.totalPages);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -162,7 +162,7 @@ function ListingUser() {
                     {user?.email}
                   </TableCell>
                   <TableCell className='px-4 py-2 border-b whitespace-nowrap'>
-                    {user?.role?.role}
+                    {user?.role}
                   </TableCell>
                   <TableCell className='px-4 py-2 border-b whitespace-nowrap'>
                     <div className='flex items-center space-x-2'>

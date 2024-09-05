@@ -104,7 +104,7 @@ function DetilSchedule() {
                   <div className='flex items-center justify-between text-gray-500 text-sm mb-4'>
                     <div className='flex items-center'>
                       <User className='w-4 h-4 mr-1' />
-                      <p>{schedules?.author?.name}</p>
+                      <p>{schedules?.Author?.name}</p>
                     </div>
                     <div className='flex items-center'>
                       <Calendar className='w-4 h-4 mr-1' />

@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "https://datakita.sukogelap.my.id/api";
 
 const endPoint = {
   // Auth
@@ -6,6 +6,7 @@ const endPoint = {
   registerUser: `${API_BASE_URL}/register`,
   getUser: `${API_BASE_URL}/users`,
   updateProfile: `${API_BASE_URL}/users/profile`,
+  updatePassword: `${API_BASE_URL}/users/change-password`,
 
   // Schedule
   createSchedule: `${API_BASE_URL}/schedules`,

@@ -56,7 +56,7 @@ function ListingSchedule() {
       .then((response) => {
         setSchedules(response?.data?.schedules);
         setFilterSchedules(response?.data?.schedules);
-        setTotalPages(response?.data?.totalPages);
+        setTotalPages(response?.data?.pagination?.totalPages);
         setIsLoading(false);
       })
       .catch((error) => {
